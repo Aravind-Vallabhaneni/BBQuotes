@@ -19,3 +19,5 @@ struct Char: Decodable {
     
     var death: Death?
 }
+
+
