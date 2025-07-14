@@ -16,4 +16,6 @@ struct Char: Decodable {
     let images: [URL]
     let status: String
     let portrayedBy: String
+    
+    var death: Death?
 }
