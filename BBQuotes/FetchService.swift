@@ -39,6 +39,49 @@ struct FetchService {
         return quote
     }
     
+    func fetchCharacter(_ name: String) async throws -> Char {
+        
+        let characterURL = baseURL.appending(path: "characters")
+        let fetchURL = characterURL.appending(queryItems: [URLQueryItem(name: "name", value: name)])
+        
+        let (data,responseCode) = try await URLSession.shared.data(from: fetchURL)
+        
+        guard let responseCode = responseCode as? HTTPURLResponse, responseCode.statusCode == 200 else {
+            throw fetchError.badResponse
+        }
+        
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        
+        let characters = try decoder.decode([Char].self, from: data)
+        
+        return characters[0]
+    }
+    
+    
+    func fetchDeath(for character: String) async throws -> Death? {
+        
+        let fetchURL = baseURL.appending(path: "deaths")
+        
+        let (data,responseCode) = try await URLSession.shared.data(from: fetchURL)
+        
+        guard let responseCode = responseCode as? HTTPURLResponse, responseCode.statusCode == 200 else {
+            throw fetchError.badResponse
+        }
+        
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        
+        let deaths = try decoder.decode([Death].self, from: data)
+
+        for death in deaths {
+            if death.character == character{
+                return death
+            }
+        }
+        
+        return nil
+    }
   
 }
 
