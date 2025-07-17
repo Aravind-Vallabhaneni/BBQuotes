@@ -11,6 +11,7 @@ struct QuoteView: View {
     
     var viewM = ViewModel()
     var show: String
+    @State var showCharacterInfo: Bool = false
     
     var body: some View {
         
@@ -66,7 +67,9 @@ struct QuoteView: View {
                             }
                             .frame(width: geo.size.width/1.1, height: geo.size.height/1.8)
                             .clipShape(.rect(cornerRadius: 50))
-                            
+                            .onTapGesture{
+                                showCharacterInfo.toggle()
+                            }
                             
                         case .failed(let error):
                             Text(error.localizedDescription)
@@ -97,6 +100,9 @@ struct QuoteView: View {
             .frame(width: geo.size.width, height: geo.size.height)
         }
         .ignoresSafeArea()
+        .sheet(isPresented: $showCharacterInfo) {
+            Characterview(character: viewM.character, show: show)
+        }
     }
 }
 
