@@ -23,51 +23,71 @@ struct QuoteView: View {
                     .frame(width: geo.size.width*2.7, height: geo.size.height * 1.2 )
                 
                 VStack {
-                    Spacer(minLength: 60)
                     
-                    Text("\"\(viewM.quote.quote)\"")
-                        .minimumScaleFactor(0.5)
-                        .foregroundStyle(.white)
-                        .multilineTextAlignment(.center)
-                        .padding()
-                        .background(.black.opacity(0.5))
-                        .clipShape(.rect(cornerRadius: 25))
-                        .padding(.horizontal)
-                    
-                    ZStack(alignment: .bottom) {
+                    VStack {
+                        Spacer(minLength: 60)
                         
-                        AsyncImage(url: viewM.character.images[0]) { image in
-                            image
-                                .resizable()
-                                .scaledToFill()
-                        } placeholder: {
+                        switch viewM.status {
+                            
+                        case .notStarted:
+                            EmptyView()
+                            
+                        case .fetching:
                             ProgressView()
+                            
+                        case .success:
+                            Text("\"\(viewM.quote.quote)\"")
+                                .minimumScaleFactor(0.5)
+                                .foregroundStyle(.white)
+                                .multilineTextAlignment(.center)
+                                .padding()
+                                .background(.black.opacity(0.5))
+                                .clipShape(.rect(cornerRadius: 25))
+                                .padding(.horizontal)
+                            
+                            ZStack(alignment: .bottom) {
+                                
+                                AsyncImage(url: viewM.character.images[0]) { image in
+                                    image
+                                        .resizable()
+                                        .scaledToFill()
+                                } placeholder: {
+                                    ProgressView()
+                                }
+                                .frame(width:geo.size.width/1.1,height: geo.size.height/1.8)
+                                
+                                Text(viewM.quote.character)
+                                    .foregroundStyle(.white)
+                                    .fontWeight(.bold)
+                                    .padding()
+                                    .frame(maxWidth: .infinity)
+                                    .background(.black.opacity(0.5 ))
+                                
+                            }
+                            .frame(width: geo.size.width/1.1, height: geo.size.height/1.8)
+                            .clipShape(.rect(cornerRadius: 50))
+                            
+                            
+                        case .failed(let error):
+                            Text(error.localizedDescription)
                         }
-                        .frame(width:geo.size.width/1.1,height: geo.size.height/1.8)
                         
-                        Text(viewM.quote.character)
-                            .foregroundStyle(.white)
-                            .fontWeight(.bold)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(.black.opacity(0.5 )) 
-                          
+                        
+                        Spacer()
                     }
-                    .frame(width: geo.size.width/1.1, height: geo.size.height/1.8)
-                    .clipShape(.rect(cornerRadius: 50))
-                    
-                    Spacer()
                     
                     Button {
-                        
+                        Task {
+                            await viewM.fethData(for: show)
+                        }
                     } label: {
                         Text("Get Random Quote")
                             .font(.title)
                             .foregroundStyle(.white)
                             .padding()
-                            .background(.breakingBadGreen)
+                            .background(Color("\(show.replacingOccurrences(of: " ", with: ""))Button"))
                             .clipShape(.rect(cornerRadius: 15))
-                            .shadow(color: .breakingBadYellow,radius: 2)
+                            .shadow(color: Color("\(show.replacingOccurrences(of: " ", with: ""))Shadow"), radius: 2)
                             
                     }
                     Spacer(minLength: 95)
