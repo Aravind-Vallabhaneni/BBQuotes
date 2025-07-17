@@ -70,8 +70,35 @@ struct Characterview: View {
                         
                         Divider()
                         
+                        DisclosureGroup("Status (spolier alert!): "){
+                            VStack(alignment: .leading) {
+                                Text(character.status)
+                                    .font(.title2)
+                                    .padding(.leading, 5)
+                                
+                                if let death = character.death {
+                                    AsyncImage(url: death.image) { image in
+                                        image
+                                            .resizable()
+                                            .scaledToFit()
+                                            .clipShape(.rect(cornerRadius: 15))
+                                    } placeholder: {
+                                        ProgressView()
+                                    }
+                                    
+                                    Text("How: \(death.details)")
+                                        .padding(.bottom,7)
+                                    
+                                    Text("Last words: \"\(death.lastWords)\"")
+                                }
+                            }
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .tint(.primary)
+                        
                    }
                     .frame(width: geo.size.width/1.25,alignment: .leading)
+                    .padding(.bottom, 50)
                 }
                 .scrollIndicators(.hidden)
             }
