@@ -16,11 +16,11 @@ import Foundation
 
 struct FetchService {
     
-    enum fetchError: Error {
+   private enum fetchError: Error {
         case badResponse
     }
     
-    let baseURL = URL(string: "https://breaking-bad-api-six.vercel.app/api")!
+   private let baseURL = URL(string: "https://breaking-bad-api-six.vercel.app/api")!
     
     
     func fetchQuote(from show: String) async throws -> Quote {

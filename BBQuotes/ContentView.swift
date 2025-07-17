@@ -14,7 +14,7 @@ struct ContentView: View {
             
             Tab("Breaking Bad", systemImage: "tortoise") {
                 
-                Text("Breaking Bad")
+                QuoteView(show: "Breaking Bad")
                     .toolbarBackgroundVisibility(.visible, for: .tabBar)
                 
             }
