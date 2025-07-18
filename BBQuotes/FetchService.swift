@@ -82,6 +82,25 @@ struct FetchService {
         
         return nil
     }
+    
+    func fetchEpisode(for show: String) async throws -> Episode? {
+        
+        let fetchURL = baseURL.appending(path: "episodes")
+        let episodeURL = fetchURL.appending(queryItems: [URLQueryItem(name: "production", value: show)])
+        
+        let (data,response) = try await URLSession.shared.data(from: episodeURL)
+        
+        guard let responseCode = response as? HTTPURLResponse, responseCode.statusCode == 200 else {
+            throw fetchError.badResponse
+        }
+        
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        
+        let episode = try decoder.decode([Episode].self, from: data)
+        
+        return episode.randomElement()
+    }
   
 }
 

@@ -14,7 +14,7 @@ struct ContentView: View {
             
             Tab(Constants.bbName, systemImage: "tortoise") {
                 
-                QuoteView(show: Constants.bbName)
+                FetchData(show: Constants.bbName)
                     .toolbarBackgroundVisibility(.visible, for: .tabBar)
                 
             }
@@ -22,13 +22,13 @@ struct ContentView: View {
             
             Tab(Constants.bcsName, systemImage: "briefcase") {
                 
-                QuoteView(show: Constants.bcsName)
+                FetchData(show: Constants.bcsName)
                     .toolbarBackgroundVisibility(.visible, for: .tabBar)
                 
             }
             
             Tab(Constants.ecName, systemImage: "car"){
-                QuoteView(show: Constants.ecName)
+                FetchData(show: Constants.ecName)
                     .toolbarBackgroundVisibility(.visible, for: .tabBar)
             }
         }
